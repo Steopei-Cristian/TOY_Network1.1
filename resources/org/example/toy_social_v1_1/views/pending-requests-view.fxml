@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane stylesheets="@../css/views/pending-requests-style.css"
+            styleClass="main-pane"
+        xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.toy_social_v1_1.controller.logic.PendingRequestsController">
+    <ListView AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" fx:id="reqListView"/>
+</AnchorPane>

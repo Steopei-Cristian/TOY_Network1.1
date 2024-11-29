@@ -1,0 +1,17 @@
+.main-pane{
+    -fx-background-color: #00246B;
+    -fx-font-weight: bold;
+    -fx-font-family: Poppins;
+    -fx-border-color: #A1D6E2;
+}
+.action-button {
+    -fx-background-color: #00246B;
+    -fx-text-fill: #A1D6E2;
+    -fx-text-alignment: center;
+    -fx-font-size: 15px;
+    -fx-start-margin: 10;
+}
+.action-button:hover {
+    -fx-background-color: #A1D6E2;
+    -fx-text-fill: #00246B;
+}

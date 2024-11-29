@@ -1,0 +1,87 @@
+.anchor-pane{
+    -fx-background-color: #00246B;
+    -fx-font-family: Poppins;
+}
+.tool-bar{
+    -fx-font-family: Poppins;
+    -fx-background-color: #A1D6E2;
+    -fx-font-weight: bold;
+    -fx-font-size: 10pt;
+}
+.logo-pic{
+    -fx-alignment: left;
+}
+.search-box {
+
+}
+.search-bar{
+    -fx-background-color: #00246B;
+    -fx-text-fill: #A1D6E2;
+    -fx-prompt-text-fill: #A1D6E2;
+}
+.search-button {
+    -fx-background-color: #1995AD;
+    -fx-text-fill: #A1D6E2;
+    -fx-background-radius: 15;
+}
+.search-button:hover {
+    -fx-text-fill: #00246B;
+}
+.options-box {
+    -fx-background-color: #00246B;
+    -fx-text-fill: #A1D6E2;
+}
+.username-label {
+    -fx-text-fill: #00246B;
+    -fx-font-size: 20;
+}
+.req-button {
+    -fx-background-color: #00246B;
+    -fx-text-fill: #A1D6E2;
+}
+.profile-button {
+    -fx-background-color: #00246B;
+    -fx-text-fill: #A1D6E2;
+}
+.main-box {
+    -fx-font-weight: bold;
+    -fx-font-family: Poppins;
+}
+.chat-box {
+
+}
+.chat-listview {
+    -fx-background-color: #1995AD;
+    -fx-border-color: #00246B;
+}
+.send-message-box {
+
+}
+.message-field {
+    -fx-background-color: #A1D6E2;
+    -fx-text-fill: #00246B;
+    -fx-prompt-text-fill: #00246B;
+}
+.send-message-button {
+    -fx-background-color: #1995AD;
+    -fx-text-fill: #A1D6E2;
+    -fx-background-radius: 15;
+}
+.send-message-button:hover {
+    -fx-text-fill: #00246B;
+}
+.friend-list-box{
+    -fx-background-color: #00246B;
+    -fx-border-width: 2px;
+    -fx-border-color: #A1D6E2;
+}
+.friend-list {
+    -fx-font-weight: bold;
+    -fx-border-style: none;
+}
+.friends-label {
+    -fx-text-alignment: center;
+    -fx-text-fill: #A1D6E2;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane stylesheets="@../css/views/signup-style.css"
+            styleClass="anchor-pane"
+            xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.toy_social_v1_1.controller.logic.SignupController">
+    <VBox alignment="CENTER" layoutX="150.0" layoutY="50.0" spacing="20.0">
+        <!-- Title -->
+        <Label styleClass="title-label" text="SIGN UP">
+
+        </Label>
+
+        <!-- Username Field -->
+        <HBox styleClass="field-hbox">
+            <Label styleClass="field-label" text="Username:">
+            </Label>
+            <TextField fx:id="usernameField" styleClass="field-input" promptText="Enter username" />
+        </HBox>
+
+        <!-- Password Field -->
+        <HBox styleClass="field-hbox">
+            <Label styleClass="field-label" text="Password:">
+            </Label>
+            <PasswordField fx:id="passwordField" styleClass="field-input" promptText="Enter password" />
+        </HBox>
+
+        <!-- Password Field -->
+        <HBox styleClass="field-hbox">
+            <Label styleClass="field-label" text="Confirm password:">
+            </Label>
+            <PasswordField fx:id="confirmPasswordField" styleClass="field-input" promptText="Confirm password" />
+        </HBox>
+
+        <!-- Signup Button -->
+        <Button fx:id="signUpButton" styleClass="signup-button" text="SIGN UP"
+                onAction="#handleSignupRequest"/>
+
+        <!-- Login Link -->
+        <Button fx:id="loginLink" styleClass="login-link" text="Already have an account? Login now"
+                onAction="#handleLoginRequest"/>
+    </VBox>
+</AnchorPane>

@@ -1,0 +1,18 @@
+.main-pane {
+    -fx-background-color: #00246B;
+    -fx-font-family: Poppins;
+    -fx-font-weight: bold;
+    -fx-border-color: #A1D6E2;
+}
+.username-label {
+    -fx-text-fill: #A1D6E2;
+    -fx-font-size: 20;
+}
+.action-button {
+    -fx-background-color: #00246B;
+    -fx-text-fill: #A1D6E2;
+}
+.action-button:hover {
+    -fx-text-fill: #00246B;
+    -fx-background-color: #A1D6E2;
+}

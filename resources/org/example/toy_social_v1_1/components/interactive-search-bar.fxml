@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox stylesheets="@../css/components/search-bar-style.css"
+      styleClass="main-box"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.toy_social_v1_1.controller.components.SearchBarController">
+
+    <!-- Search -->
+    <HBox alignment="CENTER">
+        <TextField styleClass="search-bar" fx:id="searchBar" promptText="Search users" />
+        <Button styleClass="search-button" fx:id="searchButton" text="Search" />
+    </HBox>
+
+    <!-- Options -->
+    <ComboBox styleClass="options-box" fx:id="options" />
+</VBox>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane
+        stylesheets="@../css/views/friend-actions-style.css"
+            styleClass="main-pane"
+        xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.toy_social_v1_1.controller.logic.FriendActionsController">
+    <VBox alignment="CENTER" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <Region prefHeight="2"/>
+        <Button fx:id="unfriendButton"
+                styleClass="action-button"
+                text="Unfriend" onAction="#handleUnfriendReq"/>
+        <Region prefHeight="2"/>
+        <Button fx:id="openChatButton"
+                styleClass="action-button"
+                text="Open Chat" onAction="#handleOpenChatReq"/>
+        <Region prefHeight="2"/>
+        <Button fx:id="inspectButton"
+                styleClass="action-button"
+                text="View Profile" onAction="#handleInspectReq"/>
+        <Region prefHeight="2"/>
+        <Button fx:id="cancelButton"
+                styleClass="action-button"
+                text="      Cancel      " onAction="#handleCancelReq"/>
+        <Region prefHeight="2"/>
+    </VBox>
+</AnchorPane>

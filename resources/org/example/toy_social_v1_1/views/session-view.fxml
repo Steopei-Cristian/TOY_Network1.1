@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<AnchorPane fx:id="mainPanel"
+        stylesheets="@../css/views/session-style.css" styleClass="anchor-pane"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.toy_social_v1_1.controller.logic.SessionController">
+    <HBox alignment="CENTER_LEFT" fx:id="toolBar" prefHeight="100"
+            styleClass="tool-bar" prefWidth="700">
+
+        <!-- Logo Image -->
+        <ImageView styleClass="logo-pic" fx:id="logoPic" fitHeight="40" preserveRatio="true">
+            <Image url="@../pics/logo.png"/> <!-- Path from the resources root -->
+        </ImageView>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <!-- Search menu -->
+        <VBox styleClass="search-box" alignment="TOP_CENTER">
+            <!-- Search -->
+            <HBox alignment="TOP_CENTER">
+                <TextField styleClass="search-bar" fx:id="searchBar" promptText="Search users" />
+                <Button styleClass="search-button" fx:id="searchButton" text="Search" />
+            </HBox>
+            <Region prefHeight="2"/>
+            <!-- Options -->
+            <ListView styleClass="options-box" fx:id="options"
+                      visible="false" prefHeight="60"/>
+        </VBox>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <!-- Username -->
+        <Label styleClass="username-label" fx:id="usernameLabel" text="Hello, "/>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <!-- Buttons -->
+        <Button styleClass="req-button" fx:id ="reqButton" text="Pending requests" onAction="#handleReqAction"/>
+        <Button styleClass="profile-button" fx:id = "profileButton" text="My profile" onAction="#handleProfileAction"/>
+    </HBox>
+
+    <HBox styleClass="main-box" layoutY="100">
+        <VBox fx:id="chatBox" styleClass="chat-box"
+              prefHeight="300" visible="false">
+            <Region VBox.vgrow="ALWAYS"/>
+            <ListView fx:id="chatListView" styleClass="chat-listview"
+                      prefWidth="225" prefHeight="250"
+                      visible="false"/>
+            <Region prefHeight="3"/>
+            <HBox styleClass="send-message-box" prefWidth="450" alignment="CENTER">
+                <TextField fx:id="messageField" styleClass="message-field"
+                           prefWidth="350" prefHeight="25" promptText="Type message"/>
+                <Region prefWidth="2"/>
+                <Button fx:id="sendMessageButton" styleClass="send-message-button"
+                        prefWidth="70" prefHeight="25" text="Send"
+                        onAction="#handleSendMessageReq"/>
+            </HBox>
+            <Region VBox.vgrow="ALWAYS"/>
+            <Region prefHeight="3"/>
+        </VBox>
+
+        <Region prefWidth="2"/>
+
+        <VBox styleClass="friend-list-box" layoutX="455" alignment="CENTER">
+            <Label styleClass="friends-label" text="Friend List"/>
+            <ListView styleClass="friend-list" fx:id="friendsListView"/>
+        </VBox>
+    </HBox>
+
+</AnchorPane>

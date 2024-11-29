@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane stylesheets="@../css/views/user-profile-style.css"
+            styleClass="main-pane"
+        xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.toy_social_v1_1.controller.logic.UserProfileController">
+    <VBox alignment="CENTER"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <Label styleClass="username-label" fx:id="username" />
+        <Region VBox.vgrow="ALWAYS" prefHeight="5"/>
+        <Button styleClass="action-button" fx:id="actionButton" onAction="#handleActionReq"/>
+        <Region VBox.vgrow="ALWAYS" prefHeight="5"/>
+        <Button styleClass="action-button" fx:id="cancelButton"
+                text="Cancel"
+                onAction="#handleCancelReq"/>
+    </VBox>
+</AnchorPane>

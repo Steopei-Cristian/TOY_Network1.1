@@ -1,0 +1,46 @@
+.anchor-pane {
+    -fx-background-color: #00246B;
+    -fx-font-family: Poppins;
+}
+.title-label {
+    -fx-alignment: center;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #A1D6E2;
+}
+.field-hbox {
+    -fx-spacing: 10px;
+}
+.field-label {
+    -fx-text-fill: #A1D6E2;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+.field-input {
+    -fx-background-color: #A1D6E2;
+    -fx-font-size: 10;
+    -fx-font-weight: bold;
+    -fx-text-fill: #00246B;
+    -fx-prompt-text-fill: #00246B;
+}
+.login-button {
+    -fx-background-color: #1995AD;
+    -fx-text-fill: #A1D6E2;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 10;
+    -fx-padding: 10 20 10 20;
+}
+.login-button:hover {
+    -fx-text-fill: #00246B;
+    -fx-background-color: #A1D6E2;
+}
+.signup-link {
+    -fx-text-fill: #1995AD;
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+    -fx-background-color: #00246B;
+}
+.signup-link:hover {
+    -fx-text-fill: #A1D6E2;
+}
