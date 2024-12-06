@@ -69,20 +69,20 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
 
-//        Stage stage1 = new Stage();
-//        FXMLLoader loader2 = new FXMLLoader(Main.class.getResource("views/session-view.fxml"));
-//        loader2.setControllerFactory(_ -> new SessionController(stage,
-//                userService.getByUsername("sami").get(),
-//                networkService,
-//                userService,
-//                frService,
-//                frRequestService,
-//                messageService));
-//        Scene scene1 = new Scene(loader2.load(), 700, 400);
-//        stage1.setTitle("Session");
-//        stage1.setResizable(false);
-//        stage1.setScene(scene1);
-//        stage1.show();
+        Stage stage1 = new Stage();
+        FXMLLoader loader2 = new FXMLLoader(Main.class.getResource("views/session-view.fxml"));
+        loader2.setControllerFactory(_ -> new SessionController(stage,
+                userService.getByUsername("sami").get(),
+                networkService,
+                userService,
+                frService,
+                frRequestService,
+                messageService));
+        Scene scene1 = new Scene(loader2.load(), 700, 400);
+        stage1.setTitle("Session");
+        stage1.setResizable(false);
+        stage1.setScene(scene1);
+        stage1.show();
 
         //userService.getUsersStartingWith("t").forEach(System.out::println);
     }

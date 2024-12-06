@@ -5,6 +5,8 @@ import org.example.toy_social_v1_1.domain.entities.MyGraph;
 import org.example.toy_social_v1_1.domain.entities.User;
 import org.example.toy_social_v1_1.service.entity.FriendshipService;
 import org.example.toy_social_v1_1.service.entity.UserService;
+import org.example.toy_social_v1_1.util.paging.Page;
+import org.example.toy_social_v1_1.util.paging.Pageable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -118,5 +120,15 @@ public class Network implements NetworkService {
             user.ifPresent(res::add);
         });
         return res;
+    }
+
+    public Page<User> findAllUsersFriendshipsOnPage(Pageable pageable, Long userId) {
+        List<User> friends = new ArrayList<>();
+        Page<Friendship> friendshipPage = friendshipService.findAllUserFriendshipsOnPage(pageable, userId);
+        friendshipPage.getElementsOnPage().forEach(friendship -> {
+            Optional<User> user = userService.find(friendship.getId2());
+            user.ifPresent(friends::add);
+        });
+        return new Page<>(friends, friendshipPage.getTotalNumberOfElements());
     }
 }

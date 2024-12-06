@@ -53,11 +53,14 @@ public class FriendActionsController {
     public void handleUnfriendReq(ActionEvent action) {
         network.removeFriend(currentUser.getID(), friend.getID());
         friends.remove(friend);
+        chatBox.setVisible(false);
         stage.close();
     }
 
     @FXML
     public void handleOpenChatReq(ActionEvent action) {
+        if(chatBox.isVisible())
+            chatBox.setVisible(false);
         chatBox.setVisible(true);
         stage.close();
     }

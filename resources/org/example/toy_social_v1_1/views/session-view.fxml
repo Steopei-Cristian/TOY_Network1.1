@@ -73,6 +73,14 @@
         <VBox styleClass="friend-list-box" layoutX="455" alignment="CENTER">
             <Label styleClass="friends-label" text="Friend List"/>
             <ListView styleClass="friend-list" fx:id="friendsListView"/>
+            <Region prefHeight="5"/>
+            <HBox alignment="CENTER">
+                <Button styleClass="page-button" fx:id="previousButton" text="Prev" onAction="#handlePreviousAction"/>
+                <Region prefWidth="7"/>
+                <Label styleClass="page-label" fx:id="pageLabel" text="Page"/>
+                <Region prefWidth="7"/>
+                <Button styleClass="page-button" fx:id="nextButton" text="Next" onAction="#handleNextAction"/>
+            </HBox>
         </VBox>
     </HBox>
 

@@ -20,10 +20,15 @@ import java.util.Optional;
 public class MessageListCell extends ListCell<MessageDTO> {
     private User currentUser;
     private VBox container = new VBox();
-    private Region rightMessage = new Region();
-    private Region verticalSpacer = new Region();
+
+    private HBox replyWrapper = new HBox();
+    private Region rightReply = new Region();
     private Label replyLabel = new Label();
+
+    private Region verticalSpacer = new Region();
+
     private HBox messageWrapper = new HBox();
+    private Region rightMessage = new Region();
     private Label text = new Label();
 
     public MessageListCell(User currentUser) {
@@ -41,11 +46,16 @@ public class MessageListCell extends ListCell<MessageDTO> {
         text.setMaxWidth(200);
 
         HBox.setHgrow(rightMessage, Priority.ALWAYS);
+        HBox.setHgrow(rightReply, Priority.ALWAYS);
+
         verticalSpacer.setPrefHeight(1);
+
         replyLabel.setStyle(text.getStyle() + "-fx-font-size: 10px;"
                 + "-fx-text-fill: #1994AD;" + "-fx-padding: 2px;");
 
         messageWrapper.getChildren().add(text);
+        replyWrapper.getChildren().add(replyLabel);
+
         container.getChildren().add(messageWrapper);
         setStyle("-fx-background-color: #00246B;");
     }
@@ -60,10 +70,14 @@ public class MessageListCell extends ListCell<MessageDTO> {
 
             if(message.getFrom().equals(currentUser)) {
                 messageWrapper.getChildren().remove(rightMessage);
+                replyWrapper.getChildren().remove(rightReply);
             }
             else {
                 if(!messageWrapper.getChildren().contains(rightMessage)) {
                     messageWrapper.getChildren().addFirst(rightMessage);
+                }
+                if(!replyWrapper.getChildren().contains(rightReply)) {
+                    replyWrapper.getChildren().addFirst(rightReply);
                 }
             }
 
@@ -71,12 +85,18 @@ public class MessageListCell extends ListCell<MessageDTO> {
                 if(!container.getChildren().contains(verticalSpacer)) {
                     container.getChildren().addFirst(verticalSpacer);
                 }
-                if(!container.getChildren().contains(replyLabel)) {
+
+                if(!container.getChildren().contains(replyWrapper)) {
                     replyLabel.setText("Replied to:\n" + message.getReply().getText());
-                    container.getChildren().addFirst(replyLabel);
+                    container.getChildren().addFirst(replyWrapper);
+                }
+                else {
+                    container.getChildren().remove(replyWrapper);
+                    replyLabel.setText("Replied to:\n" + message.getReply().getText());
+                    container.getChildren().addFirst(replyWrapper);
                 }
             } else {
-                container.getChildren().removeAll(verticalSpacer, replyLabel);
+                container.getChildren().removeAll(verticalSpacer, replyWrapper);
             }
 
             setGraphic(container);

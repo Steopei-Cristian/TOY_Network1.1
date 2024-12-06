@@ -155,4 +155,11 @@ public class StatementFactory {
         statement.setLong(4, user1Id);
         return statement;
     }
+
+    public PreparedStatement getPagedUserFriendships(PreparedStatement statement, Long userId, int capacity, int start) throws SQLException {
+        statement.setLong(1, userId);
+        statement.setInt(2, capacity);
+        statement.setInt(3, start);
+        return statement;
+    }
 }

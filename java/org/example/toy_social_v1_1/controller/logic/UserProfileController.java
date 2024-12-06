@@ -20,7 +20,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 
-public class UserProfileController implements Observer<EntityChangeEvent<FriendRequest>> {
+public class UserProfileController implements Observer<EntityChangeEvent<?>> {
     @FXML
     private Stage stage;
 
@@ -67,7 +67,7 @@ public class UserProfileController implements Observer<EntityChangeEvent<FriendR
     }
 
     @Override
-    public void update(EntityChangeEvent<FriendRequest> event) {
+    public void update(EntityChangeEvent<?> event) {
         setActionButtonText();
     }
 
@@ -94,15 +94,12 @@ public class UserProfileController implements Observer<EntityChangeEvent<FriendR
     @FXML
     public void handleActionReq(ActionEvent event) {
         if(actionButton.getText().equals("Send friend request")) {
-            //TODO send request
             FriendRequest newReq = new FriendRequest(currentUser.getID(),
                     searchedUser.getID(),
                     Date.valueOf(LocalDate.now()),
                     false);
             newReq.setID(friendRequestService.getLastId() + 1);
             friendRequestService.addRequest(newReq);
-            Alert notification = AlertFactory.getInstance().createNotificationAlert("Request sent");
-            notification.show();
             stage.close();
         }
         else if(actionButton.getText().equals("Unfriend")) {

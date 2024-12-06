@@ -85,3 +85,14 @@
     -fx-font-weight: bold;
     -fx-font-size: 20px;
 }
+.page-button {
+    -fx-background-color: #A1D6E2;
+    -fx-text-fill: #00246B;
+}
+.page-button:hover {
+    -fx-text-fill: #1995AD;
+}
+.page-label {
+    -fx-background-color: #00246B;
+    -fx-text-fill: #A1D6E2;
+}

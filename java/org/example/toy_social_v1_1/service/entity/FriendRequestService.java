@@ -15,26 +15,26 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class FriendRequestService implements Observable<EntityChangeEvent<FriendRequest>> {
+public class FriendRequestService implements Observable<EntityChangeEvent<?>> {
     private FriendRequestRepo friendRequestRepo;
-    private List<Observer<EntityChangeEvent<FriendRequest>>> observers = new ArrayList<>();
+    private List<Observer<EntityChangeEvent<?>>> observers = new ArrayList<>();
 
     public FriendRequestService(FriendRequestRepo friendshipRequestRepo) {
         this.friendRequestRepo = friendshipRequestRepo;
     }
 
     @Override
-    public void addObserver(Observer<EntityChangeEvent<FriendRequest>> observer) {
+    public void addObserver(Observer<EntityChangeEvent<?>> observer) {
         observers.add(observer);
     }
 
     @Override
-    public void removeObserver(Observer<EntityChangeEvent<FriendRequest>> observer) {
+    public void removeObserver(Observer<EntityChangeEvent<?>> observer) {
         observers.remove(observer);
     }
 
     @Override
-    public void notifyObservers(EntityChangeEvent<FriendRequest> event) {
+    public void notifyObservers(EntityChangeEvent<?> event) {
         observers.forEach(observer -> observer.update(event));
     }
 

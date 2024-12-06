@@ -1,10 +1,13 @@
 package org.example.toy_social_v1_1.controller.logic;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableIntegerValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import org.example.toy_social_v1_1.domain.entities.FriendRequest;
+import org.example.toy_social_v1_1.domain.entities.Friendship;
 import org.example.toy_social_v1_1.domain.entities.User;
 import org.example.toy_social_v1_1.domain.ui.PendingRequestListCell;
 import org.example.toy_social_v1_1.service.entity.FriendRequestService;
@@ -15,7 +18,7 @@ import org.example.toy_social_v1_1.util.event.EntityChangeEvent;
 import org.example.toy_social_v1_1.util.event.EntityChangeEventType;
 import org.example.toy_social_v1_1.util.observer.Observer;
 
-public class PendingRequestsController implements Observer<EntityChangeEvent<FriendRequest>> {
+public class PendingRequestsController implements Observer<EntityChangeEvent<?>> {
     private User currentUser;
     private FriendRequestService friendRequestService;
     private UserService userService;
@@ -49,13 +52,16 @@ public class PendingRequestsController implements Observer<EntityChangeEvent<Fri
     }
 
     @Override
-    public void update(EntityChangeEvent<FriendRequest> entityChangeEvent) {
-        if(entityChangeEvent.getType().equals(EntityChangeEventType.ADD)) {
-            handleAddEvent(entityChangeEvent);
-        } else if (entityChangeEvent.getType().equals(EntityChangeEventType.DELETE)) {
-            handleDeleteEvent(entityChangeEvent);
-        } else { // update
-            // TODO handle update
+    public void update(EntityChangeEvent<?> entityChangeEvent) {
+        if(entityChangeEvent.getData() instanceof FriendRequest ||
+            entityChangeEvent.getOldData() instanceof FriendRequest) {
+            if(entityChangeEvent.getType().equals(EntityChangeEventType.ADD)) {
+                handleAddEvent((EntityChangeEvent<FriendRequest>) entityChangeEvent);
+            } else if (entityChangeEvent.getType().equals(EntityChangeEventType.DELETE)) {
+                handleDeleteEvent((EntityChangeEvent<FriendRequest>) entityChangeEvent);
+            } else { // update
+                // TODO handle update
+            }
         }
     }
 

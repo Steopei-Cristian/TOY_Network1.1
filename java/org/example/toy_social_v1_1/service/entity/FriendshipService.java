@@ -6,6 +6,8 @@ import org.example.toy_social_v1_1.util.event.EntityChangeEvent;
 import org.example.toy_social_v1_1.util.event.EntityChangeEventType;
 import org.example.toy_social_v1_1.util.observer.Observable;
 import org.example.toy_social_v1_1.util.observer.Observer;
+import org.example.toy_social_v1_1.util.paging.Page;
+import org.example.toy_social_v1_1.util.paging.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,5 +68,9 @@ public class FriendshipService implements Observable<EntityChangeEvent<?>> {
 
     public List<Long> getUserFriends(Long userId) {
         return friendshipRepo.getUserFriends(userId);
+    }
+
+    public Page<Friendship> findAllUserFriendshipsOnPage(Pageable pageable, Long userId) {
+        return friendshipRepo.findAllUserFriendshipsOnPage(pageable, userId);
     }
 }

@@ -118,6 +118,8 @@ public class PendingRequestListCell extends ListCell<FriendRequest> {
                 if(!reqBox.getChildren().contains(buttonBox)) {
                     reqBox.getChildren().add(buttonBox);
                 }
+                else
+                    reqBox.getChildren().remove(buttonBox);
             } else {
                 text.setText("To " + to.get().getUsername() + " on " + req.getSent()
                         + "\nPending confirmation");

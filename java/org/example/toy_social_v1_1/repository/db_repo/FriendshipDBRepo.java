@@ -3,12 +3,13 @@ package org.example.toy_social_v1_1.repository.db_repo;
 import org.example.toy_social_v1_1.factory.StatementFactory;
 import org.example.toy_social_v1_1.domain.entities.Friendship;
 import org.example.toy_social_v1_1.repository.FriendshipRepo;
+import org.example.toy_social_v1_1.util.paging.Page;
+import org.example.toy_social_v1_1.util.paging.Pageable;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 public class FriendshipDBRepo extends AbstractDBRepo<Long, Friendship> implements FriendshipRepo {
 
@@ -186,5 +187,66 @@ public class FriendshipDBRepo extends AbstractDBRepo<Long, Friendship> implement
         }
 
         return res;
+    }
+
+    private int countUserFriendships(Connection connection, Long userId) throws SQLException {
+        try {
+            String sql = "select count(*) as count from friendships where id1 = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement = StatementFactory.getInstance().getUserFriendsStatement(statement, userId);
+            try (ResultSet result = statement.executeQuery()) {
+                int totalNumberOfFriends = 0;
+                if (result.next()) {
+                    totalNumberOfFriends = result.getInt("count");
+                }
+                return totalNumberOfFriends;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private List<Friendship> getPagedUserFriendships(Connection connection, Pageable pageable, Long userId) {
+        List<Friendship> friendshipsOnPage = new ArrayList<>();
+        try {
+            String sql = "select * from friendships where id1 = ? limit ? offset ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement = StatementFactory.getInstance().getPagedUserFriendships(statement, userId, pageable.getPageSize(), pageable.getPageSize() * pageable.getPageNumber());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Long id = resultSet.getLong("id");
+                    Long id1 = resultSet.getLong("id1");
+                    Long id2 = resultSet.getLong("id2");
+                    Date since = resultSet.getDate("since");
+                    Friendship friendship = new Friendship(id1, id2, since);
+                    friendship.setID(id);
+                    friendshipsOnPage.add(friendship);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return friendshipsOnPage;
+    }
+
+    @Override
+    public Page<Friendship> findAllUserFriendshipsOnPage(Pageable pageable, Long userId) {
+        try (Connection connection = DriverManager.getConnection(connectionString, user, password)) {
+            int totalNumberOfUserFriendships = countUserFriendships(connection, userId);
+            List<Friendship> friendshipsOnPage;
+            if (totalNumberOfUserFriendships > 0) {
+                friendshipsOnPage = getPagedUserFriendships(connection, pageable, userId);
+            } else {
+                friendshipsOnPage = new ArrayList<>();
+            }
+            return new Page<>(friendshipsOnPage, totalNumberOfUserFriendships);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Page<Friendship> findAllOnPage(Pageable pageable) {
+        return findAllUserFriendshipsOnPage(pageable, null);
     }
 }

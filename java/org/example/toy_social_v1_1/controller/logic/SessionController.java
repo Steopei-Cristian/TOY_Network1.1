@@ -1,5 +1,6 @@
 package org.example.toy_social_v1_1.controller.logic;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -33,6 +34,8 @@ import org.example.toy_social_v1_1.service.network.Network;
 import org.example.toy_social_v1_1.util.event.EntityChangeEvent;
 import org.example.toy_social_v1_1.util.event.EntityChangeEventType;
 import org.example.toy_social_v1_1.util.observer.Observer;
+import org.example.toy_social_v1_1.util.paging.Page;
+import org.example.toy_social_v1_1.util.paging.Pageable;
 
 import java.io.IOException;
 import java.sql.Time;
@@ -41,6 +44,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class SessionController implements Observer<EntityChangeEvent<?>> {
     private UserService userService;
@@ -89,7 +93,18 @@ public class SessionController implements Observer<EntityChangeEvent<?>> {
 
     private ObservableList<User> friends;
     private ObservableList<FriendRequest> friendRequests;
+    private SimpleIntegerProperty pendingRequestsCount;
     private ObservableList<MessageDTO> conversation;
+
+    private int pageSize = 2;
+    private int currentPage = 0;
+    private int totalNumberOfElements = 0;
+    @FXML
+    private Button previousButton;
+    @FXML
+    private Button nextButton;
+    @FXML
+    private Label pageLabel;
 
     public SessionController(Stage stage,
                              User currentUser,
@@ -107,10 +122,12 @@ public class SessionController implements Observer<EntityChangeEvent<?>> {
         this.friendshipService.addObserver(this);
 
         this.friendRequestService = friendRequestService;
+        friendRequestService.addObserver(this);
         this.messageService = messageService;
         messageService.addObserver(this);
 
         chattingUser = new User("empty", "empty");
+        pendingRequestsCount = new SimpleIntegerProperty(0);
 
         initFriendRequests();
         initFriends();
@@ -119,20 +136,46 @@ public class SessionController implements Observer<EntityChangeEvent<?>> {
     @Override
     public void update(EntityChangeEvent<?> event) {
         if(event.getData() instanceof Friendship) {
-            // TODO handle friendship
             if(event.getType().equals(EntityChangeEventType.ADD)) {
                 handleAddFriendship((EntityChangeEvent<Friendship>) event);
             }
-        } else if(event.getData() instanceof User) {
+            // TODO other functionalities in the future
+        }
+        else if(event.getData() instanceof User) {
             // TODO handle user later
-        } else if(event.getData() instanceof Message) {
+        }
+        else if(event.getData() instanceof Message) {
             if(event.getType().equals(EntityChangeEventType.ADD)) {
-                //TODO handle add message
                 handleAddMessage((EntityChangeEvent<Message>) event);
-            } else {
+            }
+            else {
                 //TODO other functionalities in the future
             }
 
+        }
+        else if(event.getData() instanceof FriendRequest ||
+                event.getOldData() instanceof FriendRequest) {
+            if(event.getType().equals(EntityChangeEventType.ADD)) {
+                handleAddFriendRequest((EntityChangeEvent<FriendRequest>) event);
+            }
+            else if(event.getType().equals(EntityChangeEventType.DELETE)) {
+                handleDeleteFriendRequest((EntityChangeEvent<FriendRequest>) event);
+            }
+        }
+    }
+
+    private void handleAddFriendRequest(EntityChangeEvent<FriendRequest> event) {
+        FriendRequest addedRequest = event.getData();
+        if(addedRequest.getUser2().equals(currentUser.getID())) {
+            System.out.println(addedRequest + " | " + pendingRequestsCount.get());
+            pendingRequestsCount.set(pendingRequestsCount.get() + 1);
+        }
+    }
+
+    private void handleDeleteFriendRequest(EntityChangeEvent<FriendRequest> event) {
+        FriendRequest deletedRequest = event.getOldData();
+        if(deletedRequest.getUser2().equals(currentUser.getID())) {
+            pendingRequestsCount.set(pendingRequestsCount.get() - 1);
         }
     }
 
@@ -144,7 +187,7 @@ public class SessionController implements Observer<EntityChangeEvent<?>> {
     }
 
     private void handleAddMessage(EntityChangeEvent<Message> event) {
-        if(event.getData().getTo().contains(currentUser)) {
+        if(event.getData().getTo().contains(currentUser) && chatBox.isVisible()) {
             conversation.add(new MessageDTO(event.getData()));
         }
     }
@@ -158,8 +201,11 @@ public class SessionController implements Observer<EntityChangeEvent<?>> {
     }
 
     private void initFriends() {
-        List<User> userFriends = network.getUserFriends(currentUser.getID());
+        Page<User> pagedFriends = network.findAllUsersFriendshipsOnPage(new Pageable(currentPage, pageSize), currentUser.getID());
+        List<User> userFriends = StreamSupport.stream(pagedFriends.getElementsOnPage().spliterator(), false)
+                .toList();
         friends = FXCollections.observableArrayList(userFriends);
+        totalNumberOfElements = pagedFriends.getTotalNumberOfElements();
     }
 
     @FXML
@@ -169,6 +215,15 @@ public class SessionController implements Observer<EntityChangeEvent<?>> {
         configureSearchBar();
         configureChatBox();
         configureFriendsList();
+
+        pendingRequestsCount.addListener((_, _, newVal) -> {
+            if(newVal.intValue() > 0) {
+                reqButton.setText("Pending requests - " + newVal);
+            }
+            else {
+                reqButton.setText("Pending requests");
+            }
+        });
     }
 
     //SEARCH USERS ACTIONS
@@ -276,17 +331,12 @@ public class SessionController implements Observer<EntityChangeEvent<?>> {
             if(newValue) {
                 chatListView.setItems(conversation);
                 chatListView.setOnMouseClicked(this::mouseClickedOnMessage);
-
                 chatListView.setCellFactory(_ -> new MessageListCell(
                         currentUser
                 ));
                 chatListView.setPrefHeight(Math.min(10, conversation.size()) * 25);
                 chatListView.scrollTo(conversation.size());
-
                 conversation.addListener((ListChangeListener<MessageDTO>) _ -> {
-                    chatListView.setCellFactory(_ -> new MessageListCell(
-                            currentUser
-                    ));
                     chatListView.setPrefHeight(Math.min(10, conversation.size()) * 25);
                     chatListView.scrollTo(conversation.size());
                 });
@@ -331,6 +381,11 @@ public class SessionController implements Observer<EntityChangeEvent<?>> {
                 List.of(chattingUser), messageField.getText(),
                 Timestamp.valueOf(LocalDateTime.now()), null);
         } else {
+            if(messageField.getText().replaceFirst("Replying to: .+ - ", "").isEmpty()) {
+                //TODO more complex logic
+                return;
+            }
+            
             message = new Message(currentUser,
                     List.of(chattingUser),
                     messageField.getText().replaceFirst("Replying to: .+ - ", ""),
@@ -358,14 +413,27 @@ public class SessionController implements Observer<EntityChangeEvent<?>> {
         friendsListView.setPrefHeight(Math.min(2, friends.size()) * 32);
 
         friends.addListener((ListChangeListener<User>) _ -> {
+            initFriends();
+            configureFriendsList();
             friendsListView.setPrefHeight(Math.min(2, friends.size()) * 32);
         });
-        friends.addListener((ListChangeListener<User>) _ -> {
-            friendsListView.setCellFactory(_ -> new FriendListCell(friendshipService,
-                    currentUser));
-        });
-
+        configurePagingControls();
         setSelectedFriendClicked();
+    }
+
+    private void configurePagingControls() {
+        int maxPage = (int) Math.ceil((double) totalNumberOfElements / pageSize) - 1;
+        if (maxPage == -1) {
+            maxPage = 0;
+        }
+        if (currentPage > maxPage) {
+            currentPage = maxPage;
+            initFriends();
+        }
+
+        previousButton.setDisable(currentPage == 0);
+        nextButton.setDisable((currentPage + 1) * pageSize >= totalNumberOfElements);
+        pageLabel.setText("Page " + (currentPage + 1) + "/" + (maxPage + 1));
     }
 
     @FXML
@@ -416,7 +484,7 @@ public class SessionController implements Observer<EntityChangeEvent<?>> {
 
     @FXML
     public void handleReqAction(ActionEvent event) {
-        System.out.println("CLICK");
+        initFriendRequests();
 
         tempStage = new Stage();
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/pending-requests-view.fxml"));
@@ -440,6 +508,20 @@ public class SessionController implements Observer<EntityChangeEvent<?>> {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @FXML
+    public void handlePreviousAction(ActionEvent event) {
+        currentPage--;
+        initFriends();
+        configureFriendsList();
+    }
+
+    @FXML
+    public void handleNextAction(ActionEvent event) {
+        currentPage++;
+        initFriends();
+        configureFriendsList();
     }
 
     @FXML
